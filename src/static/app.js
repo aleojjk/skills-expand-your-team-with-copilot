@@ -52,11 +52,18 @@ document.addEventListener("DOMContentLoaded", () => {
   function initDarkMode() {
     // Check localStorage for saved preference
     const savedDarkMode = localStorage.getItem("darkMode");
+    // Default to light mode if no preference is saved
     if (savedDarkMode === "enabled") {
       document.body.classList.add("dark-mode");
       darkModeIcon.textContent = "☀️";
     } else {
+      // Explicitly set to light mode (covers both 'disabled' and null cases)
+      document.body.classList.remove("dark-mode");
       darkModeIcon.textContent = "🌙";
+      // Set initial preference if not set
+      if (savedDarkMode === null) {
+        localStorage.setItem("darkMode", "disabled");
+      }
     }
   }
 
