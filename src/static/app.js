@@ -25,6 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeLoginModal = document.querySelector(".close-login-modal");
   const loginMessage = document.getElementById("login-message");
 
+  // Dark mode elements
+  const darkModeToggle = document.getElementById("dark-mode-toggle");
+  const darkModeIcon = document.getElementById("dark-mode-icon");
+
   // Activity categories with corresponding colors
   const activityTypes = {
     sports: { label: "Sports", color: "#e8f5e9", textColor: "#2e7d32" },
@@ -43,6 +47,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Authentication state
   let currentUser = null;
+
+  // Dark mode functions
+  function initDarkMode() {
+    // Check localStorage for saved preference
+    const savedDarkMode = localStorage.getItem("darkMode");
+    // Default to light mode if no preference is saved
+    if (savedDarkMode === "enabled") {
+      document.body.classList.add("dark-mode");
+      darkModeIcon.textContent = "☀️";
+    } else {
+      // Explicitly set to light mode (covers both 'disabled' and null cases)
+      document.body.classList.remove("dark-mode");
+      darkModeIcon.textContent = "🌙";
+      // Set initial preference if not set
+      if (savedDarkMode === null) {
+        localStorage.setItem("darkMode", "disabled");
+      }
+    }
+  }
+
+  function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+    
+    if (document.body.classList.contains("dark-mode")) {
+      darkModeIcon.textContent = "☀️";
+      localStorage.setItem("darkMode", "enabled");
+    } else {
+      darkModeIcon.textContent = "🌙";
+      localStorage.setItem("darkMode", "disabled");
+    }
+  }
+
+  // Add event listener for dark mode toggle
+  darkModeToggle.addEventListener("click", toggleDarkMode);
 
   // Time range mappings for the dropdown
   const timeRanges = {
@@ -916,6 +954,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Initialize app
+  initDarkMode();
   checkAuthentication();
   initializeFilters();
   fetchActivities();
