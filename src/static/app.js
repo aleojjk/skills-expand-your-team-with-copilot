@@ -552,6 +552,17 @@ document.addEventListener("DOMContentLoaded", () => {
             .join("")}
         </ul>
       </div>
+      <div class="social-share-buttons">
+        <button class="share-button facebook-share" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on Facebook">
+          📘
+        </button>
+        <button class="share-button twitter-share" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share on Twitter">
+          🐦
+        </button>
+        <button class="share-button email-share" data-activity="${name}" data-description="${details.description}" data-schedule="${formattedSchedule}" title="Share via Email">
+          ✉️
+        </button>
+      </div>
       <div class="activity-card-actions">
         ${
           currentUser
@@ -585,6 +596,21 @@ document.addEventListener("DOMContentLoaded", () => {
           openRegistrationModal(name);
         });
       }
+    }
+
+    // Add click handlers for social share buttons
+    const facebookButton = activityCard.querySelector(".facebook-share");
+    const twitterButton = activityCard.querySelector(".twitter-share");
+    const emailButton = activityCard.querySelector(".email-share");
+
+    if (facebookButton) {
+      facebookButton.addEventListener("click", () => handleShare("facebook", name, details.description, formattedSchedule));
+    }
+    if (twitterButton) {
+      twitterButton.addEventListener("click", () => handleShare("twitter", name, details.description, formattedSchedule));
+    }
+    if (emailButton) {
+      emailButton.addEventListener("click", () => handleShare("email", name, details.description, formattedSchedule));
     }
 
     activitiesList.appendChild(activityCard);
@@ -809,6 +835,34 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       messageDiv.classList.add("hidden");
     }, 5000);
+  }
+
+  // Handle social sharing
+  function handleShare(platform, activityName, description, schedule) {
+    const url = window.location.href;
+    const shareText = `Check out ${activityName} at Mergington High School! ${description} Schedule: ${schedule}`;
+    
+    let shareUrl = "";
+    
+    switch(platform) {
+      case "facebook":
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(shareText)}`;
+        window.open(shareUrl, "_blank", "width=600,height=400");
+        break;
+      
+      case "twitter":
+        const tweetText = `Check out ${activityName} at Mergington High School! ${description} Schedule: ${schedule}`;
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(url)}`;
+        window.open(shareUrl, "_blank", "width=600,height=400");
+        break;
+      
+      case "email":
+        const emailSubject = `Join ${activityName} at Mergington High School`;
+        const emailBody = `Hi!\n\nI wanted to share this activity with you:\n\n${activityName}\n${description}\n\nSchedule: ${schedule}\n\nCheck it out here: ${url}`;
+        shareUrl = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+        window.location.href = shareUrl;
+        break;
+    }
   }
 
   // Handle form submission
