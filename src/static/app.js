@@ -603,9 +603,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const twitterButton = activityCard.querySelector(".twitter-share");
     const emailButton = activityCard.querySelector(".email-share");
 
-    facebookButton.addEventListener("click", () => handleShare("facebook", name, details.description, formattedSchedule));
-    twitterButton.addEventListener("click", () => handleShare("twitter", name, details.description, formattedSchedule));
-    emailButton.addEventListener("click", () => handleShare("email", name, details.description, formattedSchedule));
+    if (facebookButton) {
+      facebookButton.addEventListener("click", () => handleShare("facebook", name, details.description, formattedSchedule));
+    }
+    if (twitterButton) {
+      twitterButton.addEventListener("click", () => handleShare("twitter", name, details.description, formattedSchedule));
+    }
+    if (emailButton) {
+      emailButton.addEventListener("click", () => handleShare("email", name, details.description, formattedSchedule));
+    }
 
     activitiesList.appendChild(activityCard);
   }
@@ -845,7 +851,7 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
       
       case "twitter":
-        const tweetText = `Check out ${activityName} at Mergington High School! ${description}`;
+        const tweetText = `Check out ${activityName} at Mergington High School! ${description} Schedule: ${schedule}`;
         shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(url)}`;
         window.open(shareUrl, "_blank", "width=600,height=400");
         break;
